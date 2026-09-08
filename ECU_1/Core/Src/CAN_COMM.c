@@ -1,0 +1,77 @@
+/*
+ * CAN_COMM.c
+ *
+ *  Created on: Jul 24, 2026
+ *      Author: desd
+ */
+
+
+#include"CAN_COMM.h"
+
+CAN_TxHeaderTypeDef TxHeader;
+CAN_RxHeaderTypeDef RxHeader;
+
+uint8_t TxData[8];
+uint8_t RxData[8];
+
+uint32_t TxMailbox;
+
+uint16_t distance;
+
+void CAN_UART(void)
+{
+
+	char msg[60];
+	HAL_UART_Transmit(&huart5,
+                  (uint8_t *)"BOARD1 Ready\r\n",
+                  14,
+                  HAL_MAX_DELAY);
+	sprintf(msg,
+	        "TX=%u (%02X %02X)\r\n",
+	        sensor_data,
+	        TxData[0],
+	        TxData[1]);
+
+	HAL_UART_Transmit(&huart5,
+	                  (uint8_t *)msg,
+	                  strlen(msg),
+	                  HAL_MAX_DELAY);
+
+}
+
+void CAN_TRANSMITT(void)
+{
+	lidarRead();
+
+	TxData[0] = (uint8_t)(sensor_data >> 8);
+	TxData[1] = (uint8_t)(sensor_data);
+	HAL_CAN_AddTxMessage(&hcan1,
+	                     &TxHeader,
+	                     TxData,
+	                     &TxMailbox);
+
+
+}
+
+
+void CAN_Headers(void)
+{
+	  TxHeader.StdId = 0x123;
+	  TxHeader.ExtId = 0x00;
+	  TxHeader.IDE = CAN_ID_STD;
+	  TxHeader.RTR = CAN_RTR_DATA;
+	  TxHeader.DLC = 2;
+	  TxHeader.TransmitGlobalTime = DISABLE;
+}
+
+
+
+void CAN_Init(void)
+{
+
+HAL_CAN_Start(&hcan1);
+HAL_UART_Transmit(&huart5,
+                (uint8_t *)"BOARD1 Ready\r\n",
+                14,
+                HAL_MAX_DELAY);
+}

@@ -1,0 +1,169 @@
+/*
+ * freertos_tasks.c
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+//
+#include "FreeRTOS.h"
+#include "task.h"
+#include"freertos_tasks.h"
+#include "RAMP_CONTROL.h"
+
+
+TaskHandle_t DecisionTaskHandle = NULL;
+TaskHandle_t DebugTaskHandle = NULL;
+
+void MotorTask(void *pvParameters)
+{
+    while(1)
+    {
+        Ramp_Update();
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+
+void DecisionTask(void *pvParameters)
+{
+    uint16_t rawDistance;
+
+    while(1)
+    {
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Decision Start\r\n",
+                          16,
+                          HAL_MAX_DELAY);
+
+        /* Read CAN Data */
+        rawDistance = ((uint16_t)RxData[0] << 8) | RxData[1];
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Raw OK\r\n",
+                          8,
+                          HAL_MAX_DELAY);
+
+        /* Sensor Filter */
+        distance = Sensor_Filter(rawDistance);
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Filter OK\r\n",
+                          11,
+                          HAL_MAX_DELAY);
+
+        /* Relative Speed */
+        RelativeSpeed_Update(distance);
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Relative OK\r\n",
+                          13,
+                          HAL_MAX_DELAY);
+
+        /* Decision Logic */
+        Decision_Update(distance);
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Decision OK\r\n",
+                          13,
+                          HAL_MAX_DELAY);
+
+        /* Ramp Control */
+        Ramp_SetTarget(Decision_GetPWM());
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Ramp OK\r\n",
+                          9,
+                          HAL_MAX_DELAY);
+
+        /* Notify Debug Task */
+        xTaskNotifyGive(DebugTaskHandle);
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Notify OK\r\n",
+                          11,
+                          HAL_MAX_DELAY);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+void DebugTask(void *pvParameters)
+{
+    char msg[80];
+
+    while(1)
+    {
+        /* Wait until DecisionTask notifies */
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        sprintf(msg,
+                "Filter=%4u Rel=%4d PWM=%2u Mode=%s\r\n",
+                distance,
+                RelativeSpeed_Get(),
+                Decision_GetPWM(),
+                Decision_GetModeString());
+
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)msg,
+                          strlen(msg),
+                          HAL_MAX_DELAY);
+    }
+}
+//void DebugTask(void *pvParameters)
+//{
+//    while(1)
+//    {
+//        HAL_UART_Transmit(&huart5,
+//                          (uint8_t *)"Debug Task Running\r\n",
+//                          20,
+//                          HAL_MAX_DELAY);
+//
+//        vTaskDelay(pdMS_TO_TICKS(1000));
+//    }
+//}
+
+//#include "main.h"
+//
+//TaskHandle_t DecisionTaskHandle = NULL;
+//TaskHandle_t DebugTaskHandle = NULL;
+//
+//void MotorTask(void *pvParameters)
+//{
+//    while(1)
+//    {
+//        HAL_UART_Transmit(&huart5,
+//                          (uint8_t *)"Motor Task\r\n",
+//                          12,
+//                          HAL_MAX_DELAY);
+//
+//        vTaskDelay(pdMS_TO_TICKS(1000));
+//    }
+//}
+//
+//void DecisionTask(void *pvParameters)
+//{
+//    while(1)
+//    {
+//        HAL_UART_Transmit(&huart5,
+//                          (uint8_t *)"Decision Task\r\n",
+//                          15,
+//                          HAL_MAX_DELAY);
+//
+//        vTaskDelay(pdMS_TO_TICKS(1000));
+//    }
+//}
+//
+//void DebugTask(void *pvParameters)
+//{
+//    while(1)
+//    {
+//        HAL_UART_Transmit(&huart5,
+//                          (uint8_t *)"Debug Task\r\n",
+//                          12,
+//                          HAL_MAX_DELAY);
+//
+//        vTaskDelay(pdMS_TO_TICKS(1000));
+//    }
+//}

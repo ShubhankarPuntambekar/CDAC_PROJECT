@@ -1,0 +1,24 @@
+/*
+ * freertos_tasks.h
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+#ifndef INC_FREERTOS_TASKS_H_
+#define INC_FREERTOS_TASKS_H_
+
+
+
+
+void MotorTask(void *pvParameters);
+#include "DECISION.h"
+#include "RELATIVE_SPEED.h"
+#include "RAMP_CONTROL.h"
+#include "SENSOR_TOF.h"
+#include "CAN_COMM.h"
+
+extern uint16_t distance;
+extern uint8_t RxData[8];
+
+#endif /* INC_FREERTOS_TASKS_H_ */

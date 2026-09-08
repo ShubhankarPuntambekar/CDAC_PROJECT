@@ -1,0 +1,4 @@
+../Core/Src/CAN_COMM.c:21:6:CAN_UART	1
+../Core/Src/CAN_COMM.c:30:6:CAN_Headers	1
+../Core/Src/CAN_COMM.c:41:6:HAL_CAN_RxFifo0MsgPendingCallback	1
+../Core/Src/CAN_COMM.c:51:6:CAN_Init	1

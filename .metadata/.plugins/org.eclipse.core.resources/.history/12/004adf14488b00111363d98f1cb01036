@@ -1,0 +1,17 @@
+/*
+ * freertos_tasks.h
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+#ifndef INC_FREERTOS_TASKS_H_
+#define INC_FREERTOS_TASKS_H_
+
+
+
+
+void MotorTask(void *pvParameters);
+
+
+#endif /* INC_FREERTOS_TASKS_H_ */

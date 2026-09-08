@@ -1,0 +1,203 @@
+/*
+ *  DECISION.c
+ *
+ *  Created on: Jul 27, 2026
+ *      Author: desd
+ */
+
+
+#include "DECISION.h"
+
+
+
+static uint8_t targetPWM = 0;
+
+static CruiseMode_t currentMode = MODE_STOP;
+
+void Decision_Update(uint16_t distance)
+{
+    switch(currentMode)
+    {
+        /*----------------------------------*/
+        case MODE_STOP:
+
+
+            if(distance > CRAWL_ENTER)
+            {
+                currentMode = MODE_CRAWL;
+            }
+
+            break;
+
+        /*----------------------------------*/
+        case MODE_CRAWL:
+
+
+            if(distance < CRAWL_EXIT)
+            {
+                currentMode = MODE_STOP;
+            }
+            else if(distance > SLOW_ENTER)
+            {
+                currentMode = MODE_SLOW;
+            }
+
+            break;
+
+        /*----------------------------------*/
+        case MODE_SLOW:
+
+
+            if(distance < SLOW_EXIT)
+            {
+                currentMode = MODE_CRAWL;
+            }
+            else if(distance > FOLLOW_ENTER)
+            {
+                currentMode = MODE_FOLLOW;
+            }
+
+            break;
+
+        /*----------------------------------*/
+        case MODE_FOLLOW:
+
+
+
+            if(distance < FOLLOW_EXIT)
+            {
+                currentMode = MODE_SLOW;
+            }
+            else if(distance > CRUISE_ENTER)
+            {
+                currentMode = MODE_CRUISE;
+            }
+
+            break;
+
+        /*----------------------------------*/
+        case MODE_CRUISE:
+
+
+            if(distance < CRUISE_EXIT)
+            {
+                currentMode = MODE_FOLLOW;
+            }
+
+            break;
+
+        /*----------------------------------*/
+
+        default:
+
+            currentMode = MODE_STOP;
+
+
+            break;
+    }
+    targetPWM = Decision_CalculatePWM(distance);
+}
+
+uint8_t Decision_GetPWM(void)
+{
+    return targetPWM;
+}
+
+CruiseMode_t Decision_GetMode(void)
+{
+    return currentMode;
+}
+
+const char* Decision_GetModeString(void)
+{
+    switch(currentMode)
+    {
+        case MODE_STOP:
+            return "STOP";
+
+        case MODE_CRAWL:
+            return "CRAWL";
+
+        case MODE_SLOW:
+            return "SLOW";
+
+        case MODE_FOLLOW:
+            return "FOLLOW";
+
+        case MODE_CRUISE:
+            return "CRUISE";
+
+        default:
+            return "UNKNOWN";
+    }
+}
+
+uint8_t Decision_CalculatePWM(uint16_t distance)
+{
+    int16_t rel_speed;
+    int16_t pwm;
+
+    /*-----------------------------------------
+      Base PWM from distance
+    ------------------------------------------*/
+
+    if(distance < 90)
+       {
+           pwm = 0;
+       }
+       else if(distance > 400)
+       {
+           pwm = 100;
+       }
+       else
+       {
+           pwm = ((distance - 90) * 100) / 310;
+       }
+
+    /*-----------------------------------------
+      Predictive Correction
+    ------------------------------------------*/
+
+    rel_speed = RelativeSpeed_Get();
+
+    /*
+        rel < 0  -> obstacle approaching
+        rel > 0  -> obstacle moving away
+    */
+
+    pwm += (rel_speed / 4);
+
+    /*-----------------------------------------
+      Clamp PWM
+    ------------------------------------------*/
+
+//    if(pwm <= 0)
+//    {
+//        pwm = 0;
+//    }
+//    else if(pwm > 0 && pwm <25)
+//    {
+//    	pwm = 25;
+//    }
+//    else if(pwm > 25 && pwm < 50)
+//    {
+//    	pwm = 50;
+//    }
+//    else if(pwm >50 && pwm < 75)
+//    {
+//    	pwm = 75;
+//    }
+//
+//    else if(pwm > 75)
+//    	pwm = 100;
+    if(pwm < 0)
+    {
+        pwm = 0;
+    }
+    else if(pwm > 100)
+    {
+        pwm = 100;
+    }
+    return (uint8_t)pwm;
+}
+

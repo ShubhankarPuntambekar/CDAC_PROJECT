@@ -1,0 +1,4 @@
+../Core/Src/CAN_COMM.c:21:6:CAN_UART	1
+../Core/Src/CAN_COMM.c:42:6:CAN_TRANSMITT	1
+../Core/Src/CAN_COMM.c:57:6:CAN_Headers	1
+../Core/Src/CAN_COMM.c:69:6:CAN_Init	1

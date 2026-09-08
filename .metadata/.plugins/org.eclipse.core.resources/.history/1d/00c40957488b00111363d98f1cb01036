@@ -1,0 +1,22 @@
+/*
+ * freertos_tasks.c
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "RAMP_CONTROL.h"
+
+void MotorTask(void *pvParameters)
+{
+    while(1)
+    {
+        Ramp_Update();
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}

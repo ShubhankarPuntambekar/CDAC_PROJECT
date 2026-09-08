@@ -1,0 +1,4 @@
+../Core/Src/freertos_tasks.c:20:6:MotorTask	16	static
+../Core/Src/freertos_tasks.c:31:6:DecisionTask	136	static
+../Core/Src/freertos_tasks.c:67:6:Ramp_Task	16	static
+../Core/Src/freertos_tasks.c:77:6:OLED_Task	16	static

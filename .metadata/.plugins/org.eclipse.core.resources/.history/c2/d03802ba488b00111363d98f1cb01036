@@ -1,0 +1,43 @@
+/*
+ * freertos_tasks.c
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "RAMP_CONTROL.h"
+
+void MotorTask(void *pvParameters)
+{
+    while(1)
+    {
+        Ramp_Update();
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+
+void DecisionTask(void *pvParameters)
+{
+    uint16_t rawDistance;
+
+    while(1)
+    {
+        rawDistance = ((uint16_t)RxData[0] << 8) | RxData[1];
+
+        distance = Sensor_Filter(rawDistance);
+
+        RelativeSpeed_Update(distance);
+
+        Decision_Update(distance);
+
+        Ramp_SetTarget(Decision_GetPWM());
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}

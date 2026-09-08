@@ -1,0 +1,4 @@
+../Core/Src/RAMP_CONTROL.c:17:6:Ramp_Init	1
+../Core/Src/RAMP_CONTROL.c:23:6:Ramp_SetTarget	2
+../Core/Src/RAMP_CONTROL.c:36:6:Ramp_Update	3
+../Core/Src/RAMP_CONTROL.c:55:9:Ramp_GetCurrentPWM	1

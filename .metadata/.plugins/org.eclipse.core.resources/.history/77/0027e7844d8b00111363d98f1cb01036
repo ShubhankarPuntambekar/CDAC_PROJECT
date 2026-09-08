@@ -1,0 +1,85 @@
+/*
+ * freertos_tasks.c
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include"freertos_tasks.h"
+#include "RAMP_CONTROL.h"
+
+
+TaskHandle_t DecisionTaskHandle = NULL;
+TaskHandle_t DebugTaskHandle = NULL;
+
+void MotorTask(void *pvParameters)
+{
+    while(1)
+    {
+        Ramp_Update();
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+
+void DecisionTask(void *pvParameters)
+{
+    uint16_t rawDistance;
+
+    while(1)
+    {
+        /* Wait for new CAN message */
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        rawDistance = ((uint16_t)RxData[0] << 8) | RxData[1];
+
+        distance = Sensor_Filter(rawDistance);
+
+        RelativeSpeed_Update(distance);
+
+        Decision_Update(distance);
+
+        Ramp_SetTarget(Decision_GetPWM());
+
+        xTaskNotifyGive(DebugTaskHandle);
+    }
+}
+
+//void DebugTask(void *pvParameters)
+//{
+//    char msg[80];
+//
+//    while(1)
+//    {
+//        /* Wait until DecisionTask notifies */
+//        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+//
+//        sprintf(msg,
+//                "Filter=%4u Rel=%4d PWM=%2u Mode=%s\r\n",
+//                distance,
+//                RelativeSpeed_Get(),
+//                Decision_GetPWM(),
+//                Decision_GetModeString());
+//
+//        HAL_UART_Transmit(&huart5,
+//                          (uint8_t *)msg,
+//                          strlen(msg),
+//                          HAL_MAX_DELAY);
+//    }
+//}
+void DebugTask(void *pvParameters)
+{
+    while(1)
+    {
+        HAL_UART_Transmit(&huart5,
+                          (uint8_t *)"Debug Task Running\r\n",
+                          20,
+                          HAL_MAX_DELAY);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}

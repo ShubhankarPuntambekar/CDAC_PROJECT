@@ -1,0 +1,208 @@
+/*
+ * CAN_COMM.c
+ *
+ *  Created on: Jul 24, 2026
+ *      Author: desd
+ */
+
+
+#include"CAN_COMM.h"
+
+
+CAN_TxHeaderTypeDef TxHeader;
+CAN_RxHeaderTypeDef RxHeader;
+
+uint8_t TxData[8];
+uint8_t RxData[8];
+
+uint32_t TxMailbox;
+
+uint16_t distance;
+
+void CAN_UART(void)
+{
+#ifdef BOARD1
+
+HAL_UART_Transmit(&huart5,
+                  (uint8_t *)"BOARD1 Ready\r\n",
+                  14,
+                  HAL_MAX_DELAY);
+
+#endif
+
+#ifdef BOARD2
+
+HAL_UART_Transmit(&huart5,
+                  (uint8_t *)"BOARD2 Ready\r\n",
+                  14,
+                  HAL_MAX_DELAY);
+
+#endif
+}
+
+void CAN_TRANSMITT(void)
+{
+#ifdef BOARD1
+  lidarRead();
+  TxData[0] = (uint8_t)(sensor_data >> 8);   // High byte
+  TxData[1] = (uint8_t)(sensor_data & 0xFF); // Low byte
+#endif
+
+#ifdef BOARD1
+
+  HAL_CAN_AddTxMessage(&hcan1,
+                       &TxHeader,
+                       TxData,
+                       &TxMailbox);
+
+  HAL_UART_Transmit(&huart5,
+                    (uint8_t *)"CAN Message Sent\r\n",
+                    18,
+                    HAL_MAX_DELAY);
+
+  HAL_Delay(500);
+
+#endif
+
+
+#ifdef BOARD2
+
+  /* Receiver does nothing here.
+     Reception happens in interrupt. */
+
+  HAL_Delay(10);
+
+#endif
+}
+
+
+void CAN_Headers(void)
+{
+	  TxHeader.StdId = 0x123;
+	  TxHeader.ExtId = 0x00;
+	  TxHeader.IDE = CAN_ID_STD;
+	  TxHeader.RTR = CAN_RTR_DATA;
+	  TxHeader.DLC = 5;
+	  TxHeader.TransmitGlobalTime = DISABLE;
+}
+
+#ifdef BOARD2
+
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+    HAL_CAN_GetRxMessage(hcan,
+                         CAN_RX_FIFO0,
+                         &RxHeader,
+                         RxData);
+
+    char msg[80];
+
+    uint16_t rawDistance;
+
+    /* Read raw distance from CAN */
+    rawDistance = ((uint16_t)RxData[0] << 8) | RxData[1];
+
+    /* Apply EMA Filter */
+    distance = Sensor_Filter(rawDistance);
+
+    /* Calculate relative speed using FILTERED distance */
+    RelativeSpeed_Update(distance);
+
+    /* Decision Logic */
+    //Decision_Update(distance);
+
+    /* Set target PWM */
+    //Ramp_SetTarget(Decision_GetPWM());
+
+    float error;
+    float pwm;
+
+    error = distance - DesiredDistance;
+
+    pwm = PID_Update(error);
+
+    Ramp_SetTarget((uint8_t)pwm);
+
+    sprintf(msg,
+            "Raw=%4u  Filter=%4u  Rel=%4d  PWM=%2u  Mode=%s\r\n",
+            rawDistance,
+            distance,
+            RelativeSpeed_Get(),
+            Decision_GetPWM(),
+            Decision_GetModeString());
+
+    HAL_UART_Transmit(&huart5,
+                      (uint8_t *)msg,
+                      strlen(msg),
+                      HAL_MAX_DELAY);
+}
+//    sprintf(msg,
+//            "Distance=%u  Mode=%s PWM=%u\r\n",
+//            distance,
+//            Decision_GetModeString(),
+//			target);
+//    HAL_UART_Transmit(&huart5,
+//
+//                      (uint8_t *)msg,
+//                      strlen(msg),
+//                      HAL_MAX_DELAY);
+
+
+#endif
+
+void CAN_Init(void)
+{
+#ifdef BOARD2
+
+CAN_FilterTypeDef filter;
+
+filter.FilterBank = 0;
+filter.FilterMode = CAN_FILTERMODE_IDMASK;
+filter.FilterScale = CAN_FILTERSCALE_32BIT;
+
+filter.FilterIdHigh = 0;
+filter.FilterIdLow = 0;
+
+filter.FilterMaskIdHigh = 0;
+filter.FilterMaskIdLow = 0;
+
+filter.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+filter.FilterActivation = ENABLE;
+filter.SlaveStartFilterBank = 14;
+
+HAL_CAN_ConfigFilter(&hcan1,&filter);
+
+#endif
+
+HAL_CAN_Start(&hcan1);
+
+#ifdef BOARD2
+
+HAL_CAN_ActivateNotification(&hcan1,
+                             CAN_IT_RX_FIFO0_MSG_PENDING);
+
+#endif
+//TxHeader.StdId = 0x123;
+//TxHeader.ExtId = 0x00;
+//TxHeader.IDE = CAN_ID_STD;
+//TxHeader.RTR = CAN_RTR_DATA;
+//TxHeader.DLC = 2;
+//TxHeader.TransmitGlobalTime = DISABLE;
+#ifdef BOARD1
+
+HAL_UART_Transmit(&huart5,
+                (uint8_t *)"BOARD1 Ready\r\n",
+                14,
+                HAL_MAX_DELAY);
+
+#endif
+
+#ifdef BOARD2
+
+HAL_UART_Transmit(&huart5,
+                (uint8_t *)"BOARD2 Ready\r\n",
+                14,
+                HAL_MAX_DELAY);
+
+#endif
+}

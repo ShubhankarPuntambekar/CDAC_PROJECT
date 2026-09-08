@@ -1,0 +1,4 @@
+../Core/Src/CAN_COMM.c:21:6:CAN_UART	80	static
+../Core/Src/CAN_COMM.c:42:6:CAN_TRANSMITT	8	static
+../Core/Src/CAN_COMM.c:57:6:CAN_Headers	4	static
+../Core/Src/CAN_COMM.c:69:6:CAN_Init	8	static

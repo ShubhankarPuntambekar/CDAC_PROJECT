@@ -1,0 +1,30 @@
+/*
+ * freertos_tasks.h
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+#ifndef INC_FREERTOS_TASKS_H_
+#define INC_FREERTOS_TASKS_H_
+
+
+
+
+
+#include "DECISION.h"
+#include "RELATIVE_SPEED.h"
+#include "RAMP_CONTROL.h"
+#include "SENSOR_TOF.h"
+#include "CAN_COMM.h"
+
+void MotorTask(void *pvParameters);
+void DecisionTask(void *pvParameters);
+void OLED_Task(void *pvParameters);
+void Ramp_Task();
+extern TaskHandle_t DecisionTaskHandle;
+extern TaskHandle_t DebugTaskHandle;
+extern uint16_t distance;
+extern uint8_t RxData[8];
+
+#endif /* INC_FREERTOS_TASKS_H_ */

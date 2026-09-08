@@ -1,0 +1,103 @@
+18:14:03 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44240	    100	  82340	 126680	  1eed8	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 
+18:15:55 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+../Core/Src/OLED_DISPLAY.c: In function 'OLED_Update':
+../Core/Src/OLED_DISPLAY.c:36:13: error: 'line2' undeclared (first use in this function); did you mean 'line1'?
+   36 |     sprintf(line2, "Mode : %-7s", Decision_GetModeString());
+      |             ^~~~~
+      |             line1
+../Core/Src/OLED_DISPLAY.c:36:13: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/OLED_DISPLAY.c:41:17: error: 'line3' undeclared (first use in this function); did you mean 'line1'?
+   41 |         sprintf(line3, "PWM  : %3d %%", Ramp_GetCurrentPWM());
+      |                 ^~~~~
+      |                 line1
+../Core/Src/OLED_DISPLAY.c:47:17: error: 'line4' undeclared (first use in this function); did you mean 'line1'?
+   47 |         sprintf(line4, "CAN  : %-7s", "OK");
+      |                 ^~~~~
+      |                 line1
+make: *** [Core/Src/subdir.mk:69: Core/Src/OLED_DISPLAY.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:16:48 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44260	    100	  82348	 126708	  1eef4	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 
+18:19:38 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44260	    100	  82348	 126708	  1eef4	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 
+18:20:21 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44264	    100	  82348	 126712	  1eef8	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 
+18:20:35 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44264	    100	  82348	 126712	  1eef8	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 
+18:21:39 **** Incremental Build of configuration Debug for project ECU_2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/OLED_DISPLAY.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/include -I/home/desd/Desktop/Middle/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/Config -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/OS -I/home/desd/Desktop/Middle/ThirdParty/SEGGER/SEGGER -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/OLED_DISPLAY.d" -MT"Core/Src/OLED_DISPLAY.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/OLED_DISPLAY.o"
+arm-none-eabi-gcc -o "ECU_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/desd/Desktop/temprory/ECU_2/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ECU_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ECU_2.elf
+ 
+arm-none-eabi-size  ECU_2.elf 
+arm-none-eabi-objdump -h -S ECU_2.elf  > "ECU_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  44268	    100	  82348	 126716	  1eefc	ECU_2.elf
+Finished building: default.size.stdout
+ 
+Finished building: ECU_2.list
+ 

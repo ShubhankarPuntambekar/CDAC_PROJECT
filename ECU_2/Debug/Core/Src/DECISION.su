@@ -1,0 +1,5 @@
+../Core/Src/ DECISION.c:17:6:Decision_Update	16	static
+../Core/Src/ DECISION.c:101:9:Decision_GetPWM	4	static
+../Core/Src/ DECISION.c:106:14:Decision_GetMode	4	static
+../Core/Src/ DECISION.c:111:13:Decision_GetModeString	4	static
+../Core/Src/ DECISION.c:136:9:Decision_CalculatePWM	24	static

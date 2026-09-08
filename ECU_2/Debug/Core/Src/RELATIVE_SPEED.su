@@ -1,0 +1,2 @@
+../Core/Src/RELATIVE_SPEED.c:14:6:RelativeSpeed_Update	16	static
+../Core/Src/RELATIVE_SPEED.c:21:9:RelativeSpeed_Get	4	static

@@ -1,0 +1,57 @@
+/*
+ * RAMP_CONTROL.c
+ *
+ *  Created on: Jul 28, 2026
+ *      Author: desd
+ */
+
+
+#include "RAMP_CONTROL.h"
+#include "MOTOR_CONTROL.h"
+#define EMERGENCY_DISTANCE    200    // mm
+
+static uint8_t currentPWM = 0;
+static uint8_t targetPWM = 0;
+uint8_t target=0;
+
+void Ramp_Init(void)
+{
+    currentPWM = 0;
+    targetPWM = 0;
+}
+
+void Ramp_SetTarget(uint8_t pwm)
+{
+    if(pwm > 100)
+    {
+        pwm = 100;
+    }
+
+    targetPWM = pwm;
+    Ramp_Update();
+}
+
+
+void Ramp_Update()
+{
+
+
+    if(currentPWM < targetPWM)
+    {
+    	target=currentPWM;
+        currentPWM++;
+    }
+
+    else if(currentPWM > targetPWM)
+    {
+    	target=currentPWM;
+        currentPWM--;
+    }
+
+    Motor_SetThrottle(currentPWM);
+
+}
+uint8_t Ramp_GetCurrentPWM(void)
+{
+    return currentPWM;
+}

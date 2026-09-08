@@ -1,0 +1,85 @@
+/*
+ * freertos_tasks.c
+ *
+ *  Created on: Jul 29, 2026
+ *      Author: desd
+ */
+
+//
+#include "FreeRTOS.h"
+#include "task.h"
+#include"freertos_tasks.h"
+#include "RAMP_CONTROL.h"
+#include "OLED_DISPLAY.h"
+
+
+
+TaskHandle_t DecisionTaskHandle = NULL;
+TaskHandle_t OLEDTaskHandle = NULL;
+uint16_t distance;
+void MotorTask(void *pvParameters)
+{
+    while(1)
+    {
+        Ramp_Update();
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+
+void DecisionTask(void *pvParameters)
+{
+    uint16_t rawDistance;
+
+    while(1)
+    {
+    	char msg[80];
+
+        rawDistance = ((uint16_t)RxData[0] << 8) | RxData[1];
+
+        distance = Sensor_Filter(rawDistance);
+
+        RelativeSpeed_Update(distance);
+
+        Decision_Update(distance);
+
+        Ramp_SetTarget(Decision_GetPWM());
+            sprintf(msg,
+                    "Raw=%4u Filter=%4u Rel=%4d PWM=%2u Mode=%s\r\n",
+                    rawDistance,
+                    distance,
+                    RelativeSpeed_Get(),
+                    Decision_GetPWM(),
+                    Decision_GetModeString());
+
+            HAL_UART_Transmit(&huart5,
+                              (uint8_t *)msg,
+                              strlen(msg),
+                              HAL_MAX_DELAY);
+        vTaskDelay(pdMS_TO_TICKS(20));
+
+    }
+}
+
+
+void Ramp_Task(void *argument)
+{
+
+    while(1)
+    {
+    	Ramp_Update();
+    	vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+void OLED_Task(void *pvParameters)
+{
+
+
+    while(1)
+    {
+    	OLED_Update(distance);
+    	vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
